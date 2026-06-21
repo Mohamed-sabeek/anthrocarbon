@@ -1,151 +1,118 @@
-# AnthroCarbon – Smart Carbon Footprint Tracker & Sustainability Assistant
+# AnthroCarbon – Smart Carbon Footprint Tracker & Sustainability Assistant (MERN Stack)
 
-AnthroCarbon is a premium, fully responsive React-based web application designed to help individuals calculate, analyze, monitor, and reduce their daily carbon footprint. 
+AnthroCarbon is a premium, full-stack MERN web application designed to help individuals calculate, analyze, monitor, and reduce their daily carbon footprint. 
 
-Unlike simple carbon calculators, AnthroCarbon operates as an intelligent sustainability assistant, evaluating user lifestyle choices (commutes, energy consumption, diet, and waste) to offer personalized recommendations, visual analytics, goal-tracking metrics, and interactive daily eco-challenges.
-
----
-
-## 🚀 Features
-
-### 1. Sticky Navigation Bar
-A sticky header with glassmorphism effects, featuring section links and scroll indicators that auto-scroll and highlight sections on active viewport intersection.
-
-### 2. Modern Hero Section
-An engaging entrance with the main tagline, a custom CSS/SVG animated eco-balance illustration, and animated platform statistics.
-
-### 3. Features & Process Flows
-Four professional, glowing feature cards and a structured 4-step process guide describing how users can transition towards zero-carbon living.
-
-### 4. Interactive Carbon Calculator
-A multi-category form with number input validation:
-* **Transportation**: Supports Car (0.25 kg CO₂/km), Bus (0.10 kg CO₂/km), Train (0.05 kg CO₂/km), Bicycle (0 kg), and Walking (0 kg).
-* **Electricity**: Daily consumption in kWh (0.82 kg CO₂/kWh factor).
-* **Food**: Dietary preference (Vegetarian = 1 kg CO₂, Mixed = 2 kg CO₂, Non-Vegetarian = 3 kg CO₂).
-* **Waste**: Daily solid waste in kg (0.5 kg CO₂/kg waste factor).
-
-### 5. Eco Score System
-Evaluates daily footprint into a rating from 0 to 100:
-* **90 - 100**: Excellent 🌱
-* **70 - 89**: Good 🌿
-* **50 - 69**: Moderate ⚠️
-* **Below 50**: Poor 🚨
-
-### 6. Analytics Dashboard (Recharts)
-Four performance metrics cards (Total Carbon Footprint, Eco Score, Largest Emission Source, and Weekly Carbon Projection) coupled with interactive, responsive visual charts:
-* **Pie Chart**: Visualizes the daily emission distribution percentage by category.
-* **Bar Chart**: Projects weekly carbon emissions for each category.
-
-### 7. Smart Sustainability Insights (Recommendation Engine)
-Identifies the user's largest carbon emission source and dynamically provides:
-* The major environmental concern associated with the category.
-* Specific improvement opportunities.
-* Actionable, personalized recommendations.
-* Estimated reduction potential (e.g., -60% for Transport) in both percentage and physical kg values.
-
-### 8. Interactive Goal Tracker
-Allows users to drag a slider to establish a target daily carbon footprint. It dynamically computes:
-* The percentage reduction required.
-* Goal coverage progress bar.
-* Target ambition status (Healthy Step, Eco Warrior, or Carbon Hero).
-
-### 9. Gamified Eco Challenges
-Six daily, toggleable eco-challenges (e.g., walk 2 km, avoid single-use plastics) that instantly update a progress card showing completed counts and total physical CO₂ offsets saved today.
-
-### 10. Audit History Tracking
-Preserves calculations locally in `localStorage`. History records are displayed in a clean table where users can:
-* Click on historical entries to immediately reload their inputs and dashboard analytics.
-* Sort records by Date, Footprint, or Eco Score.
-* Clear history logs with a secure confirmation prompt.
+Unlike basic carbon calculators, AnthroCarbon operates as an intelligent sustainability assistant, evaluating user lifestyle choices (commutes, energy consumption, diet, and waste) to offer personalized recommendations, visual analytics, goal-tracking metrics, and interactive daily eco-challenges. All calculations and targets are calculated on a Node.js/Express backend and persisted in MongoDB Atlas.
 
 ---
 
-## 🛠️ Tech Stack & Directory Structure
-
-* **Framework**: React.js 19 (Vite)
-* **Styling**: Tailwind CSS v4 (native imports, high performance)
-* **Icons**: Lucide React Icons
-* **Charts**: Recharts (Responsive SVG charts)
-* **Persistence**: Local Storage API
+## 📁 Directory Structure
 
 ```
 anthrocarbon/
-├── public/
-├── src/
-│   ├── assets/            # Static image assets
-│   ├── components/        # Reusable dashboard components
-│   │   ├── Navbar.jsx     # Sticky navigation & mobile drawer
-│   │   ├── Hero.jsx       # Tagline, stats & interactive CSS illustration
-│   │   ├── Features.jsx   # Feature cards with hover glow
-│   │   ├── HowItWorks.jsx # Process flow stepper
-│   │   ├── Calculator.jsx # Inputs form & validation engine
-│   │   ├── Dashboard.jsx  # Recharts Pie/Bar visualizations & metrics cards
-│   │   ├── Insights.jsx   # Recommendation engine & savings calculators
-│   │   ├── GoalTracker.jsx# Dynamic goal sliders & progress bars
-│   │   ├── EcoChallenges.jsx# Checkboxes & gamification card
-│   │   ├── History.jsx    # Sortable audit table & local storage resets
-│   │   └── Footer.jsx     # Copyright & mission statement
-│   ├── App.jsx            # State coordinator, local storage loaders & scroll listener
-│   ├── index.css          # Tailwind imports, fonts & custom scrollbars
-│   └── main.jsx           # ReactDOM renderer
-├── index.html             # Brand titles, meta tags, and SEO metrics
-├── package.json           # Scripts and dependencies
-└── vite.config.js         # Tailwind and React bundler plugins
+├── client/                 # React Frontend (Vite)
+│   ├── src/
+│   │   ├── assets/         # Logo and image assets
+│   │   ├── components/     # UI content components (Calculator, Dashboard, Recharts charts)
+│   │   ├── pages/          # Layout route pages (CalculatorPage, DashboardPage, GoalsPage, etc.)
+│   │   ├── services/       # API integration service (api.js - Axios)
+│   │   └── App.jsx         # Handles global React state loading and API sync
+│   ├── package.json
+│   ├── vercel.json         # Rewrites routing rules for Vercel SPA deployment
+│   └── vite.config.js
+│
+├── server/                 # Express Backend (Node.js)
+│   ├── src/
+│   │   ├── models/         # Mongoose models (CarbonCalculation.js, Goal.js)
+│   │   ├── controllers/    # Request handlers (calculationController.js, goalController.js)
+│   │   ├── routes/         # Endpoint mappings (apiRoutes.js)
+│   │   ├── services/       # Recommendation engines (insightsEngine.js)
+│   │   └── server.js       # Express server initialization & MongoDB connection
+│   ├── .env                # Server environment credentials
+│   └── package.json
+└── README.md
 ```
 
 ---
 
-## ⚙️ Installation & Running Locally
+## ⚙️ Installation & Local Running Instructions
 
-1. **Install Dependencies**:
+### 1. Running the Server (Backend)
+1. Navigate to the server folder:
    ```bash
-   npm install --legacy-peer-deps
+   cd server
    ```
-
-2. **Run in Development Mode**:
+2. Install server dependencies:
+   ```bash
+   npm install
+   ```
+3. Configure the environment variables. Open the `server/.env` file and insert your MongoDB Atlas URI:
+   ```env
+   PORT=5000
+   CLIENT_URL=http://localhost:5174
+   MONGODB_URI=your_mongodb_atlas_connection_string
+   ```
+4. Start the server in development mode (using nodemon):
    ```bash
    npm run dev
    ```
-   Open `http://localhost:5173/` in your web browser.
+   *The server runs on `http://localhost:5000`.*
 
-3. **Build for Production**:
+### 2. Running the Client (Frontend)
+1. Open a new terminal and navigate to the client folder:
    ```bash
-   npm run build
+   cd client
    ```
-   Compiles optimized assets in the `/dist` directory.
+2. Install frontend dependencies:
+   ```bash
+   npm install --legacy-peer-deps
+   ```
+3. Start the Vite React development server:
+   ```bash
+   npm run dev
+   ```
+   *The client runs on `http://localhost:5174` (or `5173`).*
 
 ---
 
-## 📤 Git Workflow – How to Push
+## ☁️ Deployment Guidelines
 
-Follow these commands to stage, commit, and push this project to your repository (GitHub, GitLab, etc.):
+### 1. Deploying the Backend (Render)
+To host the Node/Express backend on [Render](https://render.com/):
+1. Create a new **Web Service** and link your Git repository.
+2. Configure these parameters:
+   * **Root Directory**: `server`
+   * **Build Command**: `npm install`
+   * **Start Command**: `npm start`
+3. Add **Environment Variables** in the Render settings tab:
+   * `PORT`: `10000` (or leave empty)
+   * `MONGODB_URI`: *Your MongoDB Atlas Connection String*
+   * `CLIENT_URL`: *Your Vercel Frontend URL (e.g. `https://anthrocarbon.vercel.app`)*
 
-1. **Initialize Git (if not already done)**:
-   ```bash
-   git init
-   ```
+### 2. Deploying the Frontend (Vercel)
+To host the React client on [Vercel](https://vercel.com/):
+1. Import your project in the Vercel dashboard.
+2. In the project setup, specify the **Root Directory** as: `client`.
+3. Vercel will automatically detect Vite. Keep the default Build and Output settings.
+4. Add the following **Environment Variable**:
+   * `VITE_API_URL`: *Your deployed Render API URL (e.g., `https://anthrocarbon-backend.onrender.com/api`)*
+5. Click **Deploy**. Vercel will build the SPA, and the `client/vercel.json` file will ensure page-routing rewrites work natively without 404 errors.
 
-2. **Stage all files**:
-   ```bash
-   git add .
-   ```
+---
 
-3. **Create the initial commit**:
-   ```bash
-   git commit -m "feat: complete AnthroCarbon tracker and assistant dashboard"
-   ```
+## 📊 Database Models & REST API
 
-4. **Rename branch to main (recommended default)**:
-   ```bash
-   git branch -M main
-   ```
+### 1. Models (Mongoose Schema)
+* **CarbonCalculation**: Persists user footprint records.
+  * Fields: `transportType`, `distance`, `electricityUsage`, `foodPreference`, `wasteGenerated`, `transportEmission`, `electricityEmission`, `foodEmission`, `wasteEmission`, `totalCarbonFootprint`, `ecoScore`, `largestSource`, `weeklyProjection`, `createdAt`.
+* **Goal**: Tracks carbon targets.
+  * Fields: `targetCarbonFootprint`, `currentCarbonFootprint`, `progressPercentage`, `createdAt`.
 
-5. **Link to your remote repository** (replace `<YOUR_REPO_URL>` with your actual Git repository URL, e.g., `https://github.com/username/anthrocarbon.git`):
-   ```bash
-   git remote add origin <YOUR_REPO_URL>
-   ```
-
-6. **Push to the remote repository**:
-   ```bash
-   git push -u origin main
-   ```
+### 2. REST API Endpoints
+* **`POST /api/calculations`**: Receives raw inputs, computes emissions and Eco Scores, detects the largest source, and saves the calculation record.
+* **`GET /api/calculations`**: Retrieves the history logs of all calculations.
+* **`GET /api/calculations/latest`**: Fetches the most recent calculation record.
+* **`DELETE /api/calculations`**: Wipes all stored calculation history.
+* **`POST /api/goals`**: Sets or updates the active carbon reduction goal and target progress.
+* **`GET /api/goals`**: Fetches the current carbon reduction goal.
+* **`GET /api/insights`**: Runs the backend Smart Insights Engine on the latest calculation, returning dynamic categories, concerns, opportunities, and optimization metrics.
