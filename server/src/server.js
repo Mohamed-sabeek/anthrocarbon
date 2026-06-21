@@ -11,10 +11,19 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Dynamic CORS configuration to allow localhost ports automatically in dev
-const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'];
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  'https://anthrocarbon.vercel.app'
+];
+
 if (process.env.CLIENT_URL) {
   process.env.CLIENT_URL.split(',').forEach(url => {
-    const trimmed = url.trim();
+    let trimmed = url.trim();
+    if (trimmed.endsWith('/')) {
+      trimmed = trimmed.slice(0, -1);
+    }
     if (trimmed && !allowedOrigins.includes(trimmed)) {
       allowedOrigins.push(trimmed);
     }
