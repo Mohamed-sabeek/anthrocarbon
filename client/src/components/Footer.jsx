@@ -1,5 +1,6 @@
 import React from 'react';
 import { Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import logoImg from '../assets/logo.png';
 
 export default function Footer() {
@@ -17,9 +18,10 @@ export default function Footer() {
           
           {/* Logo & Mission */}
           <div className="md:col-span-6 space-y-4 text-left">
-            <div 
-              className="flex items-center space-x-2.5 cursor-pointer w-fit"
+            <Link 
+              to="/"
               onClick={handleScrollToTop}
+              className="flex items-center space-x-2.5 cursor-pointer w-fit"
             >
               <div className="p-1 rounded-xl bg-white/10 hover:bg-white/20 transition-colors duration-300">
                 <img src={logoImg} className="h-7 w-7 object-contain" alt="AnthroCarbon Logo" />
@@ -27,8 +29,7 @@ export default function Footer() {
               <span className="text-lg font-bold tracking-tight text-white font-display">
                 Anthro<span className="text-emerald-400">Carbon</span>
               </span>
-            </div>
-
+            </Link>
             
             <p className="text-emerald-200 text-sm max-w-sm leading-relaxed">
               Empowering individuals to make sustainable choices through carbon awareness and actionable environmental insights.
@@ -42,19 +43,20 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 text-xs font-medium text-emerald-100">
               <li>
-                <a href="#home" className="hover:text-white transition-colors">Home</a>
+                <Link to="/" className="hover:text-white transition-colors">Home</Link>
               </li>
               <li>
-                <a href="#calculator" className="hover:text-white transition-colors">Calculator</a>
+                <Link to="/calculator" className="hover:text-white transition-colors">Calculator</Link>
               </li>
               <li>
-                <a href="#dashboard" className="hover:text-white transition-colors">Dashboard</a>
+                <Link to="/dashboard" className="hover:text-white transition-colors">Dashboard</Link>
               </li>
               <li>
-                <a href="#insights" className="hover:text-white transition-colors">Insights</a>
+                <Link to="/insights" className="hover:text-white transition-colors">Insights</Link>
               </li>
             </ul>
           </div>
+
 
           {/* Sustainability Message & Socials */}
           <div className="md:col-span-3 text-left space-y-4">

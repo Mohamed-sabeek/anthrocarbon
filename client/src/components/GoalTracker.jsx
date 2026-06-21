@@ -43,22 +43,8 @@ export default function GoalTracker({ currentFootprint, targetFootprint, onTarge
   };
 
   return (
-    <section id="goals" className="py-20 bg-white scroll-mt-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-          <span className="text-emerald-600 font-bold uppercase tracking-wider text-xs bg-emerald-100/60 px-3 py-1.5 rounded-full">
-            Goal Tracker
-          </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-emerald-950 font-display">
-            Set Your Sustainability Goals
-          </h2>
-          <div className="h-1 w-20 bg-gradient-to-r from-emerald-500 to-teal-500 mx-auto rounded-full" />
-          <p className="text-gray-600">
-            Establish a target footprint, measure your required carbon cuts, and monitor your alignment.
-          </p>
-        </div>
+    <div id="goals" className="space-y-8">
+      <div className="max-w-4xl mx-auto">
 
         {/* Goal Card */}
         <div className="bg-white rounded-3xl border border-emerald-50 shadow-xl p-6 md:p-10 relative overflow-hidden">
@@ -155,6 +141,6 @@ export default function GoalTracker({ currentFootprint, targetFootprint, onTarge
         </div>
 
       </div>
-    </section>
+    </div>
   );
 }

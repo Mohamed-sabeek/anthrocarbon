@@ -48,22 +48,8 @@ export default function Dashboard({ currentFootprint }) {
   };
 
   return (
-    <section id="dashboard" className="py-20 bg-white scroll-mt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Title */}
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-          <span className="text-emerald-600 font-bold uppercase tracking-wider text-xs bg-emerald-100/60 px-3 py-1.5 rounded-full">
-            Dashboard
-          </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-emerald-950 font-display">
-            Analytics Dashboard
-          </h2>
-          <div className="h-1 w-20 bg-gradient-to-r from-emerald-500 to-teal-500 mx-auto rounded-full" />
-          <p className="text-gray-600">
-            Real-time visual breakdown of your daily environmental emissions, score metrics, and weekly projections.
-          </p>
-        </div>
+    <div id="dashboard" className="space-y-8">
+      <div className="max-w-7xl mx-auto">
 
         {/* Dashboard Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
@@ -195,6 +181,6 @@ export default function Dashboard({ currentFootprint }) {
         </div>
 
       </div>
-    </section>
+    </div>
   );
 }

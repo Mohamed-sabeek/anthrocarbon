@@ -40,36 +40,21 @@ export default function History({ historyList, onClearHistory, onReloadHistoryIt
   const sortedHistory = getSortedHistory();
 
   return (
-    <section id="history" className="py-20 bg-gradient-to-b from-white to-emerald-50/20 scroll-mt-20">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+    <div id="history" className="space-y-4">
+      <div className="max-w-6xl mx-auto">
         
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-12">
-          <div className="text-left space-y-4">
-            <span className="text-emerald-600 font-bold uppercase tracking-wider text-xs bg-emerald-100/60 px-3 py-1.5 rounded-full">
-              Audit Trail
-            </span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-emerald-950 font-display">
-              Calculation History
-            </h2>
-            <div className="h-1 w-20 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full" />
-            <p className="text-gray-600 text-sm">
-              Your historical lifestyle logs saved locally. Click a row to reload its dashboard metrics.
-            </p>
+        {/* Compact Table Header Actions */}
+        {historyList.length > 0 && (
+          <div className="flex justify-end mb-4">
+            <button
+              onClick={() => setShowConfirm(true)}
+              className="inline-flex items-center px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold rounded-xl text-xs border border-rose-200 transition-colors cursor-pointer"
+            >
+              <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+              Clear History
+            </button>
           </div>
-
-          {historyList.length > 0 && (
-            <div>
-              <button
-                onClick={() => setShowConfirm(true)}
-                className="inline-flex items-center px-4 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold rounded-xl text-sm border border-rose-200 transition-colors cursor-pointer"
-              >
-                <Trash2 className="h-4 w-4 mr-2" />
-                Clear History
-              </button>
-            </div>
-          )}
-        </div>
+        )}
 
         {/* Clear Confirmation Modal */}
         {showConfirm && (
@@ -221,6 +206,6 @@ export default function History({ historyList, onClearHistory, onReloadHistoryIt
         )}
 
       </div>
-    </section>
+    </div>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Car, Zap, Apple, Trash2, ArrowRight, AlertCircle, RefreshCw } from 'lucide-react';
+import apiService from '../services/api';
 
 export default function Calculator({ onCalculationComplete }) {
   const [transportType, setTransportType] = useState('Car');
@@ -9,6 +10,8 @@ export default function Calculator({ onCalculationComplete }) {
   const [waste, setWaste] = useState('2');
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
   const transportOptions = [
     { name: 'Car', label: 'Car', factor: 0.25 },
@@ -39,7 +42,7 @@ export default function Calculator({ onCalculationComplete }) {
     return Object.keys(tempErrors).length === 0;
   };
 
-  const handleCalculate = (e) => {
+  const handleCalculate = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
@@ -47,63 +50,27 @@ export default function Calculator({ onCalculationComplete }) {
     const el = parseFloat(electricity);
     const w = parseFloat(waste);
 
-    // Factors
-    const transportFactor = transportOptions.find(o => o.name === transportType)?.factor || 0;
-    const transportEmissions = d * transportFactor;
-    const electricityEmissions = el * 0.82;
-    const foodEmissions = foodPreference === 'Vegetarian' ? 1 : foodPreference === 'Mixed' ? 2 : 3;
-    const wasteEmissions = w * 0.5;
+    setIsSubmitting(true);
+    setSubmitError(null);
 
-    const totalFootprint = parseFloat((transportEmissions + electricityEmissions + foodEmissions + wasteEmissions).toFixed(2));
-    
-    // Eco Score Formula: Base of 100, subtracting footprint scaled by factor 3
-    const baseScore = 100 - (totalFootprint * 3);
-    const ecoScore = Math.max(10, Math.min(100, Math.round(baseScore)));
+    try {
+      const result = await apiService.saveCalculation({
+        transportType,
+        distance: d,
+        electricityUsage: el,
+        foodPreference,
+        wasteGenerated: w,
+      });
 
-    let status = 'Moderate';
-    let color = 'text-amber-600 bg-amber-50 border-amber-200';
-    let icon = '⚠️';
-
-    if (ecoScore >= 90) {
-      status = 'Excellent';
-      color = 'text-emerald-700 bg-emerald-50 border-emerald-200';
-      icon = '🌱';
-    } else if (ecoScore >= 70) {
-      status = 'Good';
-      color = 'text-teal-700 bg-teal-50 border-teal-200';
-      icon = '🌿';
-    } else if (ecoScore >= 50) {
-      status = 'Moderate';
-      color = 'text-amber-700 bg-amber-50 border-amber-200';
-      icon = '⚠️';
-    } else {
-      status = 'Poor';
-      color = 'text-rose-700 bg-rose-50 border-rose-200';
-      icon = '🚨';
-    }
-
-    onCalculationComplete({
-      inputs: { transportType, distance: d, electricity: el, foodPreference, waste: w },
-      breakdown: {
-        transport: parseFloat(transportEmissions.toFixed(2)),
-        electricity: parseFloat(electricityEmissions.toFixed(2)),
-        food: parseFloat(foodEmissions.toFixed(2)),
-        waste: parseFloat(wasteEmissions.toFixed(2)),
-      },
-      total: totalFootprint,
-      ecoScore,
-      ecoStatus: status,
-      ecoColor: color,
-      ecoIcon: icon,
-      date: new Date().toISOString(),
-    });
-
-    // Smooth scroll to dashboard
-    const dashboardSection = document.querySelector('#dashboard');
-    if (dashboardSection) {
-      setTimeout(() => {
-        dashboardSection.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
+      onCalculationComplete(result);
+    } catch (err) {
+      console.error('Calculation submission error:', err);
+      setSubmitError(
+        err.response?.data?.error ||
+        'Unable to process your calculation. Please check your backend connection.'
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -114,21 +81,22 @@ export default function Calculator({ onCalculationComplete }) {
     setFoodPreference('Mixed');
     setWaste('2');
     setErrors({});
+    setSubmitError(null);
   };
 
   return (
-    <section id="calculator" className="py-20 bg-gradient-to-b from-emerald-50/20 to-white scroll-mt-20">
+    <section id="calculator" className="py-12 bg-transparent">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-          <span className="text-emerald-600 font-bold uppercase tracking-wider text-xs bg-emerald-100/60 px-3 py-1.5 rounded-full">
+          <span className="text-emerald-600 font-bold uppercase tracking-wider text-xs bg-emerald-100/60 px-3.5 py-1.5 rounded-full">
             Calculator
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-emerald-950 font-display">
             Calculate Your Carbon Footprint
           </h2>
           <div className="h-1 w-20 bg-gradient-to-r from-emerald-500 to-teal-500 mx-auto rounded-full" />
-          <p className="text-gray-600">
-            Provide details about your daily routines below. We will compute your ecological balance and generate your Eco Score.
+          <p className="text-gray-600 text-sm sm:text-base">
+            Enter your lifestyle information and discover your environmental impact.
           </p>
         </div>
 
@@ -324,20 +292,39 @@ export default function Calculator({ onCalculationComplete }) {
               </div>
             </div>
 
+            {/* Error Message */}
+            {submitError && (
+              <div className="p-4 rounded-xl bg-rose-50 border border-rose-100 flex items-center space-x-3 text-rose-800 text-sm font-medium">
+                <AlertCircle className="h-5 w-5 text-rose-500 shrink-0" />
+                <span>{submitError}</span>
+              </div>
+            )}
+
             {/* Controls */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button
                 type="submit"
-                className="flex-1 inline-flex items-center justify-center px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold rounded-2xl shadow-xl shadow-emerald-600/25 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer group"
+                disabled={isSubmitting}
+                className="flex-1 inline-flex items-center justify-center px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold rounded-2xl shadow-xl shadow-emerald-600/25 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer group disabled:opacity-75 disabled:cursor-not-allowed"
               >
-                Calculate My Footprint
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                {isSubmitting ? (
+                  <>
+                    <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                    Calculating Footprint...
+                  </>
+                ) : (
+                  <>
+                    Calculate My Footprint
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
               </button>
               
               <button
                 type="button"
                 onClick={handleReset}
-                className="px-6 py-4 bg-gray-50 hover:bg-gray-100 text-gray-600 font-semibold rounded-2xl border border-gray-200 transition-colors flex items-center justify-center cursor-pointer"
+                disabled={isSubmitting}
+                className="px-6 py-4 bg-gray-50 hover:bg-gray-100 text-gray-600 font-semibold rounded-2xl border border-gray-200 transition-colors flex items-center justify-center cursor-pointer disabled:opacity-50"
               >
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Reset Form
