@@ -58,5 +58,5 @@ if (!MONGODB_URI) {
 // Start Server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`👉 CORS allowed origin: ${CLIENT_URL}`);
+  console.log(`👉 CORS allowed origins: ${allowedOrigins.join(', ')}`);
 });
